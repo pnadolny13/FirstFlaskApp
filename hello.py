@@ -22,7 +22,7 @@ def signup():
     global links
     links = request.form['links']    
     global date
-    date = datetime.datetime.now().strftime("%m %B, %Y")
+    date = datetime.datetime.now().strftime("%B %d, %Y")
     print(day + today + thoughts + links + date)
     
     #open log file and write to it
@@ -32,7 +32,7 @@ def signup():
         print (line)    
     content.close()
     content = open (file, "a")
-    content.write("\n \n \n ### Day " + day + ": " + date + "\n \n")
+    content.write("\n \n \n### Day " + day + ": " + date + "\n \n")
     content.write("**Today\'s Progress**: " + today + "\n \n")    
     content.write("**Thoughts** " + thoughts + "\n \n")
     content.write("**Link(s) to work:** " + links + "\n")
