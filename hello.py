@@ -26,7 +26,7 @@ def signup():
     print(day + today + thoughts + links + date)
     
     #open log file and write to it
-    file = "C:\\Users\\pnadolny\\Documents\\Personal_Development\\GitHub\\100-days-of-code\\log - Copy.md"
+    file = "C:\\Users\\pnadolny\\Documents\\Personal_Development\\GitHub\\100-days-of-code\\log.md"
     content = open(file,"r")
     for line in content:
         print (line)    
