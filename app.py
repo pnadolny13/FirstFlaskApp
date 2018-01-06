@@ -5,14 +5,18 @@ import datetime
 import os
 app = Flask(__name__)
 
+warning = ""
 @app.route("/")
 def hello():
     thisAuthor = "Pat"
-    thisName = "everyone"    
-    return render_template('index.html', author=thisAuthor, name=thisName)
+    thisName = "everyone"
+    print ("warning is :" + warning)
+    return render_template('index.html', author=thisAuthor, name=thisName, warning=warning )
  
 @app.route('/signup', methods = ['POST'])
 def signup():
+    global warning
+    warning = ""
     global day
     day = request.form['day']
     global today
@@ -29,14 +33,20 @@ def signup():
     file = "C:\\Users\\pnadolny\\Documents\\Personal_Development\\GitHub\\100-days-of-code\\log.md"
     content = open(file,"r")
     for line in content:
-        print (line)    
+        print (line)
+        if ("Day " + day + ":") in line:
+            warning = "THAT DAY ALREADY EXISTS!!!"            
+            return redirect('/') 
+            raise NameError('RAISED WARNING: LOG FOR THAT DAY ALREADY EXISTS')
     content.close()
+
+    # day doesnt exist, go ahead and update now
     content = open (file, "a")
     content.write("\n \n \n### Day " + day + ": " + date + "\n \n")
     content.write("**Today\'s Progress**: " + today + "\n \n")    
     content.write("**Thoughts** " + thoughts + "\n \n")
     content.write("**Link(s) to work:** " + links + "\n")
-    content.close() 
+    content.close()
     
     return redirect('/')    
 
