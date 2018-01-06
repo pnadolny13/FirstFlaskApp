@@ -5,9 +5,19 @@
   </head>
 
   <body>
+    <p>100 Days of Code Log Input:</p>
     <form action="/signup" method="post">
-        <input type="text" name="email"></input>
-        <input type="submit" value="Signup"></input>
+        <p>Day:</p>
+        <input type="text" name="day"></input>
+        <p>Today's Progress:</p>
+        <textarea name="today" cols="50" rows="4"></textarea>        
+        <p>Thoughts:</p>
+        <textarea name="thoughts" cols="50" rows="4"></textarea>                
+        <p>Links:</p>
+        <input type="text" name="links"></input> 
+        <br/>
+        <br/>
+        <input type="submit" value="Submit"></input>
     </form>
   </body>
 </html>
