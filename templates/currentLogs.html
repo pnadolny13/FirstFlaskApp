@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ author }}'s app</title>
+  </head>
+  <a href="/">Go Home</a>
+  <body>
+    <p>Here are the logs:</p>
+      {% for line in log %}
+          {% if line.startswith("###") %}
+              <br/>
+              <br/>
+          {% endif %}
+      <p>{{ line }}</p>
+      {% endfor %}
+  </body>
+</html>
