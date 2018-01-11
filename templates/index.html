@@ -1,22 +1,29 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>{{ author }}'s app</title>
-  </head>
-  <body>
-    <p>---100 Days of Code---</p>
-    <form action="/action" method="post">
-        <p>What would you like to do?:</p>       
-        <input type="radio" name="action" value="view">View Current Logs</input>
-        <br/>
-        <br/>                
-        <input type="radio" name="action" value="input">Add New Entry</input>
-        <br/>
-        <br/>
-        <input type="radio" name="action" value="delete">Delete Today's Entry</input>
-        <br/>
-        <br/>          
-        <input type="submit" value="Submit"></input>        
-    </form>
-  </body>
-</html>
+{% extends "bootstrap/base.html" %}
+{% block title %}Pat's First Flask app{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">100 Days Log App</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="/">Home</a></li>
+      <li><a href="/input">Input Log</a></li>
+      <li><a href="/delete">Delete Log</a></li>
+      <li><a href="/github">Push to Github</a></li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+    <p>Current Logs</p>
+      {% for line in log %}
+          {% if line.startswith("###") %}
+              <br/>
+              <br/>
+          {% endif %}
+      <p>{{ line }}</p>
+      {% endfor %}      
+{% endblock %}

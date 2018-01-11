@@ -1,59 +1,83 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, request, redirect
+from flask_bootstrap import Bootstrap
+
 import datetime
 app = Flask(__name__)
+Bootstrap(app)
 
 warning = ""
 file = "C:\\Users\\pnadolny\\Documents\\Personal_Development\\GitHub\\100-days-of-code\\log.md"
-thisAuthor = "Pat"
 thisName = "everyone"
 date = datetime.datetime.now().strftime("%B %d, %Y")
 lastDay = ""
 recent = ""
 recentLine = 0
 
+
+#######    VIEWS  ################
+
 @app.route("/")
-def home():
-    return render_template('index.html', author=thisAuthor, name=thisName, warning=warning )
+def homeView():
+    prepForInputPage()
+    log = open(file,"r")
+    return render_template('index.html', name=thisName, warning=warning, log=log )
 
-@app.route('/action', methods = ['POST'])
-def action():
-    # if action is log or input redirect, if not then send back to homepage
-    action = request.form['action']
-    global recent
-    if action == "view":
-        prepForInputPage()
-        return redirect('/currentLogs')
-    elif action == "input":
-        prepForInputPage()
-        return render_template('input.html', author=thisAuthor, warning="", lastDay=lastDay)
-    elif action == "delete":
-        prepForInputPage()
-        # call input with no inputs to load in variables if needed
-        print ("date = " + date)
-        print ("recent = " + recent)
-        print ("recent = " + str(recentLine))        
-        if date in recent:
-            logsR = open(file,"r")
-            lines = logsR.readlines()
-            logsR.close()
-            logsW = open(file,"w")            
-            count = 1;
-            for line in lines:
-                if count == (recentLine - 2) or count == (recentLine - 1) or count >= recentLine:
-                    #deleteLine
-                    print("Delete: " + line)
-                else:
-                    logsW.write(line)
-                count += 1
-            recent = ""
-            logsW.close()        
-        return redirect('/currentLogs')
+@app.route('/input')
+def inputView():
+    prepForInputPage()
+    return render_template('input.html', warning="", lastDay=lastDay)    
 
-    print ("warning is :" + warning)
 
-@app.route('/inputs', methods = ['POST'])
+@app.route('/currentLogs')
+def currentLogsView():
+    ## here just render the whole log file
+    prepForInputPage()
+    log = open(file,"r")
+    return render_template('currentLogs.html', log=log)
+    
+@app.route('/delete')
+def deleteView():
+    prepForInputPage()
+    return render_template('delete.html') 
+
+
+@app.route('/github')
+def pushToGithubView():
+    prepForInputPage()
+    return render_template('github.html') 
+
+
+###########   ACTIONS  ################
+
+@app.route('/delete', methods = ['POST'])
+def delete():
+    prepForInputPage()
+    # call input with no inputs to load in variables if needed
+    global recent       
+    print ("date = " + date)
+    print ("recent = " + recent)
+    print ("recent = " + str(recentLine)) 
+    if date in recent:
+        logsR = open(file,"r")
+        lines = logsR.readlines()
+        logsR.close()
+        logsW = open(file,"w")            
+        count = 1;
+        for line in lines:
+            if count == (recentLine - 2) or count == (recentLine - 1) or count >= recentLine:
+                #deleteLine
+                print("Delete: " + line)
+            else:
+                logsW.write(line)
+            count += 1
+        recent = ""
+        logsW.close()
+    return redirect('/')
+
+
+@app.route('/inputData', methods = ['POST'])
 def inputs():
     global warning
     warning = ""
@@ -69,7 +93,7 @@ def inputs():
     for line in content:
         if (date) in line:
             warning = "ENTRY FOR TODAY ALREADY EXISTS!!!"
-            return render_template('input.html', author=thisAuthor, warning=warning, recent=recent)
+            return render_template('input.html', warning=warning, recent=recent)
     content.close()
 
     # day doesnt exist, go ahead and update now
@@ -82,12 +106,11 @@ def inputs():
     
     return redirect('/')    
 
-@app.route('/currentLogs')
-def currentLogs():
-    ## here just render the whole log file
-    log = open(file,"r")
-    return render_template('currentLogs.html', author=thisAuthor, log=log)
-    
+
+
+
+########### METHODS ################
+
 def prepForInputPage():
     logs = open(file,"r")
     global recent
