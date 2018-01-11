@@ -20,11 +20,13 @@
 
 {% block content %}
   <body>
-    <p>This is the entry you are trying to delete:</p>
-      {% for line in log %}
-          {% if date in line %}
-            <p>{{ line }}</p>
-          {% endif %}
-      {% endfor %}
+    <p>Would you like to delete this entry?</p>
+      <br/>
+      {% for line in toDelete %}
+          <p>{{ line }}</p>
+      {% endfor %}  
+    <form action="/delete" method="post">               
+        <input type="submit" value="Delete"></input>
+    </form>
   </body>   
 {% endblock %}

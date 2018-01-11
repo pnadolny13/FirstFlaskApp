@@ -9,7 +9,6 @@ Bootstrap(app)
 
 warning = ""
 file = "C:\\Users\\pnadolny\\Documents\\Personal_Development\\GitHub\\100-days-of-code\\log.md"
-thisName = "everyone"
 date = datetime.datetime.now().strftime("%B %d, %Y")
 lastDay = ""
 recent = ""
@@ -22,7 +21,7 @@ recentLine = 0
 def homeView():
     prepForInputPage()
     log = open(file,"r")
-    return render_template('index.html', name=thisName, warning=warning, log=log )
+    return render_template('index.html', warning=warning, log=log )
 
 @app.route('/input')
 def inputView():
@@ -40,7 +39,16 @@ def currentLogsView():
 @app.route('/delete')
 def deleteView():
     prepForInputPage()
-    return render_template('delete.html') 
+    log = open(file,"r")
+    toDelete = []
+    deleteBool = False
+    for line in log:
+        if date in line:
+            deleteBool = True
+        if deleteBool:
+            toDelete.append(line)
+    deleteBool = False
+    return render_template('delete.html', toDelete=toDelete) 
 
 
 @app.route('/github')
@@ -56,19 +64,16 @@ def delete():
     prepForInputPage()
     # call input with no inputs to load in variables if needed
     global recent       
-    print ("date = " + date)
-    print ("recent = " + recent)
-    print ("recent = " + str(recentLine)) 
     if date in recent:
-        logsR = open(file,"r")
+        logsR = open(file,"rb")
         lines = logsR.readlines()
         logsR.close()
-        logsW = open(file,"w")            
+        logsW = open(file,"wb")            
         count = 1;
         for line in lines:
             if count == (recentLine - 2) or count == (recentLine - 1) or count >= recentLine:
                 #deleteLine
-                print("Delete: " + line)
+                print("Delete: " + str(line))
             else:
                 logsW.write(line)
             count += 1
