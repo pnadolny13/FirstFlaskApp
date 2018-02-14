@@ -6,6 +6,9 @@ from flask_bootstrap import Bootstrap
 #from flask.ext.cqlalchemy import CQLAlchemy
 import csv
 import datetime
+import subprocess
+import git
+
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
@@ -53,13 +56,6 @@ class Logs(db.Model):
 
 #######    VIEWS  ################
 
-@app.route("/test")
-def test():
-    response = "{ \"response\" : \"pat\" }"
-    print (jsonify(response))
-    return (jsonify(response))
-
-
 @app.route("/")
 def homeView():
     prepForInputPage()
@@ -97,7 +93,12 @@ def deleteView():
 @app.route('/github')
 def pushToGithubView():
     prepForInputPage()
-    return render_template('github.html') 
+    # hit github and check if theres a diff on the file
+    repo = git.Repo( 'C:/Users/pnadolny/Documents/Personal_Development/GitHub/100-days-of-code/' )
+    gitOutput = repo.git.status()
+#    if "Untracked files" in gitOutput or "modified" in gitOutput:
+        # do nothing
+    return render_template('github.html', gitOutput = gitOutput ) 
 
 
 ###########   ACTIONS  ################
@@ -164,12 +165,19 @@ def inputs():
     content.close()
     
     # write to sql db
-    log = Logs(day=str(day), logContent=today)
-    db.session.add(log)
-    db.session.commit()
+#    log = Logs(day=str(day), logContent=today)
+#    db.session.add(log)
+#    db.session.commit()
 
     
-    return redirect('/')    
+    return redirect('/')
+
+@app.route('/pushToGitHub', methods = ['POST'])
+def pushToGit():
+    repo = git.Repo( 'C:/Users/pnadolny/Documents/Personal_Development/GitHub/100-days-of-code/' )
+    repo.remotes.origin.push();
+    print("pushed")
+    return redirect('/')
 
 
 

@@ -19,5 +19,17 @@
 {% endblock %}
 
 {% block content %}
-    <p>Coming Soon!!</p>    
+    <p>{{ gitOutput }}</p>    
+        <form action="/pushToGitHub" method="post">
+        <input type="submit" value="Push"></input>
+    </form>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.min.js"></script>
+    <script src="/static/js/hello_world_controller.js"></script>
+    <div ng-app="HelloWorldApp">
+        <div ng-controller="HelloWorldController">
+            <h1>{{greeting}}</h1>
+        </div>
+    </div>
 {% endblock %}
+
+
