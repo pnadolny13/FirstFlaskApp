@@ -7,7 +7,7 @@ from flask_bootstrap import Bootstrap
 import csv
 import datetime
 import subprocess
-import git
+import github
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
